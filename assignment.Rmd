@@ -1,0 +1,160 @@
+---
+title: "Homework Assignment"
+author: "Boyko Amarov"
+date: "2023-05-09"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# Instructions
+
+1.  Please write your answers beneath each question, and please *do not
+    remove the original questions* from your solution.
+
+2.  Please, do not alter the data loading chunk (the first one in the
+    code)
+
+3.  Please use code chunks to write your code
+
+4.  Write the free-text answers outside of the code chunks, and do not
+    use \# (it serves to start a comment in R code, but it renders as a
+    heading in HTML)
+
+5.  Compile your homework (press the knit button: top left in R-Studio)
+    and make sure that your code runs without errors and that it shows
+    your solution. *Homework with broken code or answers that cannot be
+    reproduced from your code will not be graded!*
+
+6.  Latex math syntax is *optional* for your solution.
+
+7.  To submit your solution open your [homework GitHub
+    repository](https://classroom.github.com/a/u36_R321) and click on
+    the file that contains the original assignment. Find the pencil icon
+    (top left) and click on it. The file should be in edit mode now, so
+    you can copy your solution from R-Studio and paste it into the
+    GitHub page. Click on the "Commit" button at the bottom of the page
+    to save your solution.
+
+8.  Verify that your solution is uploaded correctly. Open the assignment
+    file in GitHub again, and make sure that it contains your answer.
+
+9.  If you have questions about the homework, please write me an email
+    [boyko.amarov\@gmail.com](mailto:boyko.amarov@gmail.com).
+
+# The Data
+
+This exercise uses a data set of house sales prices in King County, USA,
+between May 2014 and May 2015.
+
+Variables description
+
+-   id (character) - Unique ID for each home sold
+-   price (numeric) - Price of each home sold (in USD)
+-   bedrooms (numeric) - Number of bedrooms
+-   bathrooms (numeric) - Number of bathrooms, where .5 accounts for a
+    room with a toilet but no shower
+-   sqft_living (numeric) - Square footage of the apartments interior
+    living space
+-   sqft_lot (numeric) - Square footage of the land space
+-   yr_built - The year the house was initially built
+
+```{r}
+## Pleas do NOT change this chunk
+## install.packages("tidyverse")
+library(tidyverse)
+
+kc_houses <- read_csv(
+  "https://github.com/feb-sofia/econometrics-2023/raw/main/data/kc_house_data.csv"
+  ) %>%
+  select(id, price, bedrooms, bathrooms, sqft_living, sqft_lot, floors, yr_built)
+```
+
+# Problem 1: Descriptive Statistics
+
+1.  How many houses does the data set `kc_houses` contain?
+
+2.  Compute the homes' average, minimum, and maximum sales prices.
+
+3.  What was the median age of the houses in 2015? Write one sentence
+    explaining the meaning of the median.
+
+4.  Visualize the distribution of prices using a histogram.
+
+5.  Visualize the distribution of bedrooms using a bar chart.
+
+6.  How many houses had more than one bedroom?
+
+7.  What was the share of houses with more than two bedrooms?
+
+8.  Create two new columns to hold the living and land areas measured in
+    square meters.
+
+9.  What was the average price per square meter (living area)?
+
+# Problem 2: Linear Regression Model
+
+1.  Create a scatterplot for the USD price and the square-meter living
+    area.
+
+2.  What are the meanings of $\mu_i$, $\beta_0$ and $\beta_1$ in the
+    following linear model? In this model, $i$ indexes the houses sold,
+    and $n$ is the number of houses. What are the units of measurement
+    of the model coefficients?
+
+$$
+\text{price}_i \sim N(\mu_i, \sigma^2), \quad i = 1,\ldots,n \\
+\mu_i = \beta_0 + \beta_1 \text{Sq. Meters Living Area}_i
+$$
+
+3.  Fit the linear regression model using `lm` and write down the
+    estimated regression equation.
+
+4.  What is the expected difference in sales prices between houses with
+    100 and with 300 square meters of living space?
+
+5.  Compute a 95 percent confidence interval for $\beta_1$.
+
+# Problem 3: Linear Regression model with a binary predictor
+
+1.  Create a new variable `bathrooms_gt_1` in the data set `kc_houses`
+    that equals `TRUE` if the house has more than one bathroom and is
+    `FALSE` otherwise.
+
+2.  Visualize the distribution of prices for the two groups (less than
+    one bathroom and more than one bathroom).
+
+Use the following linear regression model
+
+$$
+\text{price}_i \sim N(\mu_i, \sigma^2)\\
+\mu_i = \beta_0 + \beta_1 \text{bathrooms_gt_1}_i
+$$
+
+3.  What are the meanings of the coefficients $\beta_0$ and $\beta_1$ in
+    the context of the data? What are the units of measurement of the
+    coefficients?
+
+4.  Fit the model using the `lm` function.
+
+5.  Test the following hypothesis by computing the critical values using
+    the t-distribution at a probability of wrong rejection of a true
+    null hypothesis of 0.01. *Hint*: Use the output of `summary` to find
+    the coefficient and standard error estimates.
+
+$$
+H_0: \beta_1 = 0 \\
+H_1: \beta_1 \neq 0
+$$
+
+6.  Test the following hypothesis. Explain the meaning of the hypothesis
+    in the context of the data. Compute the p-value of the test and
+    explain your decision to reject (or not reject) the null hypothesis
+    at a probability of wrong rejection of a true null hypothesis of
+    0.05.
+
+$$
+H_0: \beta_1 \leq 200000 \\
+H_1: \beta_1 > 200000
+$$
